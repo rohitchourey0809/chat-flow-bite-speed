@@ -16,7 +16,7 @@ const Sidebar = ({
         setNodeText={setNodeText}
         selectedNode={selectedNode}
         setSelectedNode={setSelectedNode}
-        onDragStart={onDragStart} // Pass onDragStart here
+        onDragStart={onDragStart}
       />
       {/* Add other sidebar components here if needed */}
     </div>

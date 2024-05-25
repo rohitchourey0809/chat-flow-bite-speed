@@ -1,9 +1,13 @@
 "use client"
 import React, { useState } from "react";
-import ReactFlow, { addEdge, Background, Controls } from "react-flow-renderer";
-import Textnode from "./components/Textnode";
-import Sidebar from "./components/Sidebar";
-
+import ReactFlow, {
+  addEdge,
+  Background,
+  Controls,
+  ReactFlowProvider,
+} from "react-flow-renderer";
+import Sidebar from "../app/components/Sidebar";
+import Textnode from "../app/components/Textnode";
 
 export default function Home() {
   const [nodes, setNodes] = useState([]);
@@ -23,10 +27,16 @@ export default function Home() {
   const handleDrop = (event) => {
     event.preventDefault();
     const text = event.dataTransfer.getData("text/plain");
-    const position = { x: event.clientX, y: event.clientY }; // Adjust position according to your needs
+    const reactFlowBounds = document
+      .querySelector(".react-flow")
+      .getBoundingClientRect();
+    const position = {
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
+    };
     const newNode = {
-      id: Math.random(),
-      type: "default",
+      id: `node-${nodes.length + 1}`,
+      type: "textNode",
       position,
       data: { label: text },
     };
@@ -38,7 +48,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex" onDrop={handleDrop} onDragOver={handleDragOver}>
+    <div className="flex h-full">
       <Sidebar
         nodeText={nodeText}
         setNodeText={setNodeText}
@@ -46,36 +56,27 @@ export default function Home() {
         setSelectedNode={setSelectedNode}
         onDragStart={handleDragStart}
       />
-      <div className="flex-grow">
+      <ReactFlowProvider>
+        <div
+          className="flex-grow h-full"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
         <ReactFlow
-          elements={nodes.concat(edges)}
-          onElementsRemove={(elementsToRemove) =>
-            setNodes((prevNodes) =>
-              prevNodes.filter(
-                (node) => !elementsToRemove.some((el) => el.id === node.id)
-              )
-            )
-          }
-          onConnect={(params) =>
-            setEdges((prevEdges) => addEdge(params, prevEdges))
-          }
-          onElementClick={handleNodeClick}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={setNodes}
+            onEdgesChange={setEdges}
+            onConnect={(params) => setEdges((eds) => addEdge(params, eds))}
+            onNodeClick={handleNodeClick}
+            nodeTypes={{ textNode: Textnode }}
           style={{ width: "100%", height: "100vh" }}
         >
           <Background />
           <Controls />
-          {nodes.map((node) => (
-            <Textnode
-              key={node.id}
-              id={node.id}
-              data={node.data}
-              position={node.position}
-              selected={selectedNode && selectedNode.id === node.id}
-              isNew={node.isNew} // Pass isNew prop here
-            />
-          ))}
         </ReactFlow>
       </div>
+      </ReactFlowProvider>
     </div>
   );
 }
