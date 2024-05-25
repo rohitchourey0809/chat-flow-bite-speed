@@ -18,8 +18,8 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import "reactflow/dist/base.css";
-import Sidebar from "./Sidebar.jsx";
-import TextNode from "./TextNode.jsx";
+import Sidebar from "./Sidebar";
+import TextNode from "./TextNode";
 
 // Key for local storage
 const flowKey = "flow-key";
@@ -197,7 +197,7 @@ const FlowWithProvider = () => {
         position,
         data: {
           label: `${type === "textnode" ? "Text Node" : null}`,
-          text: type === "textnode" ? "Text Node" : undefined, 
+          text: type === "textnode" ? "Text Node" : undefined,
         },
       };
       console.log("Node created: ", newNode);
