@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from "react";
 import ReactFlow, { addEdge, Background, Controls } from "react-flow-renderer";
-import Sidebar from "../app/components/Sidebar";
 import Textnode from "./components/Textnode";
+import Sidebar from "./components/Sidebar";
 
 
 export default function Home() {
