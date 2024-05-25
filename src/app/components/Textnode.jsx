@@ -1,31 +1,39 @@
 import React from "react";
-import { Handle, Position } from "react-flow-renderer";
+import { Handle, Position } from "reactflow";
 
-const Textnode = ({ id, data, position, selected, isNew }) => {
+//custome node
+function TextNode({ data, selected }) {
   return (
     <div
-      className={`text-node ${selected ? "selected" : ""} ${
-        isNew ? "bg-green-100 border-green-400 text-green-600" : "bg-gray-100 border-gray-400 text-green-600 px-12 py-4"
-      } border rounded p-2 shadow-md`}
-      style={{ left: position.x, top: position.y, position: "absolute" }}
+      className={`w-40  shadow-md rounded-md bg-white   ${
+        selected ? "border-solid border-2 border-indigo-500/100" : ""
+      } `}
     >
-      <div className="text-node-content">
-        <span>{data.label}</span>
+      <div className="flex flex-col">
+        <div className="max-h-max px-2 py-1 text-left text-black text-xs font-bold rounded-t-md bg-teal-300">
+          ✉️ send message
+        </div>
+        <div className="px-3 py-2 ">
+          <div className="text-xs font-normal text-black">
+            {data.text ?? "Text Node"}
+          </div>
+        </div>
       </div>
+
       <Handle
-        type="source" // Make this node a source handle
-        position={Position.Right} // Position of the handle
-        id={`${id}-out`} // Unique id for the handle
-        style={{ background: "#555" }}
+        id="a"
+        type="target"
+        position={Position.Left}
+        className="w-1 rounded-full bg-slate-500"
       />
       <Handle
-        type="target" // Make this node a target handle
-        position={Position.Left} // Position of the handle
-        id={`${id}-in`} // Unique id for the handle
-        style={{ background: "#559" }}
+        id="b"
+        type="source"
+        position={Position.Right}
+        className="w-1 rounded-full bg-gray-500"
       />
     </div>
   );
-};
+}
 
-export default Textnode;
+export default TextNode;
