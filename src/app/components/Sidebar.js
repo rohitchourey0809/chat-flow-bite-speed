@@ -30,7 +30,7 @@ export default function Sidebar({
         </div>
       ) : (
         <>
-          <h3 className="animation-pulse text-xl mb-4 text-teal-900">
+          <h3 className="animate-ping text-xl mb-4 text-teal-900">
             Nodes Panel
           </h3>
           <button

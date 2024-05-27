@@ -14,7 +14,7 @@ function TextNode({ data, selected }) {
           ✉️ send message
         </div>
         <div className="px-3 py-1 ">
-          <div className="text-xs font-normal text-black">
+          <div className=" text-xs font-normal text-black">
             {data.text ?? "Text Node"}
           </div>
         </div>
