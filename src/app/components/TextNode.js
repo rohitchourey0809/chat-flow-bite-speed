@@ -10,10 +10,10 @@ function TextNode({ data, selected }) {
       } `}
     >
       <div className="flex flex-col">
-        <div className="max-h-max px-2 py-1 text-left text-black text-xs font-bold rounded-t-md bg-teal-300">
+        <div className="max-h-max px-2 py-1 text-left text-black text-xs font-bold rounded-t-md bg-green-600">
           ✉️ send message
         </div>
-        <div className="px-3 py-2 ">
+        <div className="px-3 py-1 ">
           <div className="text-xs font-normal text-black">
             {data.text ?? "Text Node"}
           </div>

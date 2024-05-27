@@ -21,10 +21,8 @@ import "reactflow/dist/base.css";
 import Sidebar from "./Sidebar";
 import TextNode from "./TextNode";
 
-
-
 // Key for local storage
-const flowKey = "flow-key";
+const flowKey = "Nodesdata";
 
 // Initial nodes setup
 const initialNodes = [
@@ -60,8 +58,8 @@ const FlowWithProvider = () => {
   // Update nodes data when nodeText or selectedElements changes
   useEffect(() => {
     if (selectedElements.length > 0) {
-      setNodes((nds) =>
-        nds.map((node) => {
+      setNodes((nodes) =>
+        nodes.map((node) => {
           if (node.id === selectedElements[0]?.id) {
             let updatedData = {};
             if (selectedElements[0].type === "textnode") {
@@ -203,7 +201,7 @@ const FlowWithProvider = () => {
         },
       };
       console.log("Node created: ", newNode);
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nodes) => nodes.concat(newNode));
     },
     [reactFlowInstance, setNodes]
   );

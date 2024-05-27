@@ -30,14 +30,16 @@ export default function Sidebar({
         </div>
       ) : (
         <>
-          <h3 className="text-xl mb-4 text-blue-900">Nodes Panel</h3>
-          <div
-            className="bg-white p-3 border-2 border-gray-500 rounded cursor-move flex justify-center items-center text-gray-500 hover:bg-gray-500 hover:text-white transition-colors duration-200"
+          <h3 className="animation-pulse text-xl mb-4 text-teal-900">
+            Nodes Panel
+          </h3>
+          <button
+            className=" bg-white p-3 border-2 font-semibold border-gray-500 rounded cursor-move flex justify-center items-center text-gray-500 hover:bg-cyan-500 hover:text-white transition-colors duration-200"
             onDragStart={(event) => onDragStart(event, "textnode")}
             draggable
           >
             Message Node
-          </div>
+          </button>
         </>
       )}
     </aside>
