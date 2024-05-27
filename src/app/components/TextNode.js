@@ -3,6 +3,7 @@ import { Handle, Position } from "reactflow";
 
 //custome node
 function TextNode({ data, selected }) {
+  console.log("data.text".data?.id);
   return (
     <div
       className={`w-40  shadow-md rounded-md bg-white   ${
@@ -15,7 +16,7 @@ function TextNode({ data, selected }) {
         </div>
         <div className="px-3 py-1 ">
           <div className=" text-xs font-normal text-black">
-            {data.text ?? "Text Node"}
+            {data.id ?? "Text Node"}
           </div>
         </div>
       </div>

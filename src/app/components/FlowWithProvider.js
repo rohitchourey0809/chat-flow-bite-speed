@@ -55,6 +55,7 @@ const FlowWithProvider = () => {
     []
   );
 
+  console.log("nodes", nodes);
   // Update nodes data when nodeText or selectedElements changes
   useEffect(() => {
     if (selectedElements.length > 0) {
