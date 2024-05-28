@@ -128,15 +128,15 @@ const FlowWithProvider = () => {
   const onSave = useCallback(() => {
     if (reactFlowInstance) {
       const emptyTargetHandles = checkEmptyTargetHandles();
-      if (nodes.length > 1 && (emptyTargetHandles > 1 || isNodeUnconnected())) {
-        alert(
-          "Error: More than one node has an empty target handle or there are unconnected nodes."
-        );
-      } else {
+      // if (nodes.length > 0 && (emptyTargetHandles > 0 || isNodeUnconnected())) {
+      //   alert(
+      //     "Error: More than one node has an empty target handle or there are unconnected nodes."
+      //   );
+      // } else {
         const flow = reactFlowInstance.toObject();
         localStorage.setItem(flowKey, JSON.stringify(flow));
         alert("Save successful!"); // Provide feedback when save is successful
-      }
+      // }
     }
   }, [reactFlowInstance, nodes, isNodeUnconnected]);
 
@@ -164,8 +164,8 @@ const FlowWithProvider = () => {
       );
       // If the source handle is already occupied, prevent the connection
       if (isSourceHandleOccupied) {
-        alert("Source handle already occupied.");
-        return;
+        // alert("Source handle already occupied.");
+        // return;
       }
       console.log("Edge created: ", params);
       setEdges((eds) => addEdge(params, eds));
