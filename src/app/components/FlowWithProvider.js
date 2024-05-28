@@ -18,6 +18,8 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import "reactflow/dist/base.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "./Sidebar";
 import TextNode from "./TextNode";
 
@@ -129,13 +131,13 @@ const FlowWithProvider = () => {
     if (reactFlowInstance) {
       const emptyTargetHandles = checkEmptyTargetHandles();
       // if (nodes.length > 0 && (emptyTargetHandles > 0 || isNodeUnconnected())) {
-      //   alert(
+      //   toast.error(
       //     "Error: More than one node has an empty target handle or there are unconnected nodes."
       //   );
       // } else {
-        const flow = reactFlowInstance.toObject();
-        localStorage.setItem(flowKey, JSON.stringify(flow));
-        alert("Save successful!"); // Provide feedback when save is successful
+      const flow = reactFlowInstance.toObject();
+      localStorage.setItem(flowKey, JSON.stringify(flow));
+      toast.success("Save successful!"); // Provide feedback when save is successful
       // }
     }
   }, [reactFlowInstance, nodes, isNodeUnconnected]);
@@ -152,6 +154,7 @@ const FlowWithProvider = () => {
       }
     };
     restoreFlow();
+    toast.success("Restore successful!"); // Provide feedback when restore is successful
   }, [setNodes, setViewport, setEdges]);
 
   // Handle edge connection
@@ -164,7 +167,7 @@ const FlowWithProvider = () => {
       );
       // If the source handle is already occupied, prevent the connection
       if (isSourceHandleOccupied) {
-        // alert("Source handle already occupied.");
+        // toast.error("Source handle already occupied. Please click on save buton");
         // return;
       }
       console.log("Edge created: ", params);
@@ -197,8 +200,8 @@ const FlowWithProvider = () => {
         type,
         position,
         data: {
-          label: `${type === "textnode" ? "Text Node" : null}`,
-          text: type === "textnode" ? "Text Node" : undefined,
+          label: `${type === "textnode" ? `Text Node ${getId()}` : null}`,
+          text: type === "textnode" ? `Text Node ${getId()}` : undefined,
         },
       };
       console.log("Node created: ", newNode);
@@ -213,6 +216,7 @@ const FlowWithProvider = () => {
 
   return (
     <div className="flex flex-row min-h-screen lg:flex-row">
+      <ToastContainer />
       <div className="flex-grow h-screen" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
