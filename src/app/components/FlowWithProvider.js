@@ -1,10 +1,10 @@
-"use client";
+"use client"
 import React, {
   useState,
-  useEffect,
-  useRef,
   useCallback,
   useMemo,
+  useRef,
+  useEffect,
 } from "react";
 import ReactFlow, {
   ReactFlowProvider,
@@ -23,10 +23,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "./Sidebar";
 import TextNode from "./TextNode";
 
-// Key for local storage
 const flowKey = "Nodesdata";
 
-// Initial nodes setup
 const initialNodes = [
   {
     id: "node_0",
@@ -36,20 +34,18 @@ const initialNodes = [
   },
 ];
 
-// Function for generating unique IDs for nodes
 let id = 3;
 const getId = () => `node_${id++}`;
 
 const FlowWithProvider = () => {
-  // States and hooks setup
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [selectedElements, setSelectedElements] = useState([]);
   const [nodeText, setNodeText] = useState("");
+  const [nodeIndex, setNodeIndex] = useState(1); // Initialize nodeIndex
 
-  // Define custom node types
   const nodeTypes = useMemo(
     () => ({
       textnode: TextNode,
@@ -57,8 +53,6 @@ const FlowWithProvider = () => {
     []
   );
 
-  console.log("nodes", nodes);
-  // Update nodes data when nodeText or selectedElements changes
   useEffect(() => {
     if (selectedElements.length > 0) {
       setNodes((nodes) =>
@@ -84,7 +78,6 @@ const FlowWithProvider = () => {
     }
   }, [nodeText, selectedElements, setNodes]);
 
-  // Handle node click
   const onNodeClick = useCallback(
     (event, node) => {
       setSelectedElements([node]);
@@ -101,10 +94,8 @@ const FlowWithProvider = () => {
     [setNodes]
   );
 
-  // Setup viewport
   const { setViewport } = useReactFlow();
 
-  // Check for empty target handles
   const checkEmptyTargetHandles = () => {
     let emptyTargetHandles = 0;
     edges.forEach((edge) => {
@@ -115,7 +106,6 @@ const FlowWithProvider = () => {
     return emptyTargetHandles;
   };
 
-  // Check if any node is unconnected
   const isNodeUnconnected = useCallback(() => {
     let unconnectedNodes = nodes.filter(
       (node) =>
@@ -126,23 +116,21 @@ const FlowWithProvider = () => {
     return unconnectedNodes.length > 0;
   }, [nodes, edges]);
 
-  // Save flow to local storage
   const onSave = useCallback(() => {
     if (reactFlowInstance) {
       const emptyTargetHandles = checkEmptyTargetHandles();
-      // if (nodes.length > 0 && (emptyTargetHandles > 0 || isNodeUnconnected())) {
-      //   toast.error(
-      //     "Error: More than one node has an empty target handle or there are unconnected nodes."
-      //   );
-      // } else {
-      const flow = reactFlowInstance.toObject();
-      localStorage.setItem(flowKey, JSON.stringify(flow));
-      toast.success("Save successful!"); // Provide feedback when save is successful
-      // }
+      if (nodes.length > 0 && (emptyTargetHandles > 0 || isNodeUnconnected())) {
+        toast.error(
+          "Error: More than one node has an empty target handle or there are unconnected nodes."
+        );
+      } else {
+        const flow = reactFlowInstance.toObject();
+        localStorage.setItem(flowKey, JSON.stringify(flow));
+        toast.success("Save successful!"); // Provide feedback when save is successful
+      }
     }
   }, [reactFlowInstance, nodes, isNodeUnconnected]);
 
-  // Restore flow from local storage
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey));
@@ -157,18 +145,17 @@ const FlowWithProvider = () => {
     toast.success("Restore successful!"); // Provide feedback when restore is successful
   }, [setNodes, setViewport, setEdges]);
 
-  // Handle edge connection
   const onConnect = useCallback(
     (params) => {
       const { source, sourceHandle } = params;
-      // Check if the source handle already has an edge connected
       const isSourceHandleOccupied = edges.some(
         (edge) => edge.source === source && edge.sourceHandle === sourceHandle
       );
-      // If the source handle is already occupied, prevent the connection
       if (isSourceHandleOccupied) {
-        // toast.error("Source handle already occupied. Please click on save buton");
-        // return;
+        toast.error(
+          "Source handle already occupied. Please click on save button"
+        );
+        return;
       }
       console.log("Edge created: ", params);
       setEdges((eds) => addEdge(params, eds));
@@ -176,13 +163,11 @@ const FlowWithProvider = () => {
     [setEdges, edges]
   );
 
-  // Enable drop effect on drag over
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  // Handle drop event to add a new node
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -200,14 +185,16 @@ const FlowWithProvider = () => {
         type,
         position,
         data: {
-          label: `${type === "textnode" ? `Text Node ${getId()}` : null}`,
-          text: type === "textnode" ? `Text Node ${getId()}` : undefined,
+          label: `${type === "textnode" ? `Text Node ${nodeIndex}` : null}`,
+          text: type === "textnode" ? `Text Node ${nodeIndex}` : undefined,
+          index: nodeIndex, // Assign the current node index
         },
       };
-      console.log("Node created: ", newNode);
+      setNodeIndex((prevIndex) => prevIndex + 1); // Increment the index
+      console.log("Node created with ID: ", newNode.id);
       setNodes((nodes) => nodes.concat(newNode));
     },
-    [reactFlowInstance, setNodes]
+    [reactFlowInstance, setNodes, nodeIndex]
   );
 
   const rfStyle = {
